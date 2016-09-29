@@ -55,14 +55,14 @@ public class ArtemisAgent {
 
     private static void addTimerStartingCode(final ClassPool classPool, final CtClass queueClass) throws NotFoundException, CannotCompileException {
         CtMethod addTailMethod = queueClass.getDeclaredMethod("addTail", new CtClass[]{classPool.get("org.apache.activemq.artemis.core.server.MessageReference"), CtClass.booleanType});
-        addTailMethod.insertBefore(TOTAL_TIMER_CONTEXT_VARIABLE_NAME + ".startTimer(String.valueOf(ref.getMessage().getMessageID()));" +
-                QUEUE_TIMER_CONTEXT_VARIABLE_NAME + ".startTimer(String.valueOf(ref.getMessage().getMessageID()));");
+        final String startTimerMethodInvocation = ".startTimer(String.valueOf(ref.getMessage().getMessageID()));";
+        addTailMethod.insertBefore(format("%s%s%s%s", TOTAL_TIMER_CONTEXT_VARIABLE_NAME, startTimerMethodInvocation, QUEUE_TIMER_CONTEXT_VARIABLE_NAME, startTimerMethodInvocation));
     }
 
     private static void addTimerStoppingCode(final CtClass queueClass) throws NotFoundException, CannotCompileException {
         CtMethod proceedDeliver = queueClass.getDeclaredMethod("proceedDeliver");
-        proceedDeliver.insertAfter(TOTAL_TIMER_CONTEXT_VARIABLE_NAME + ".stopTimer(String.valueOf(reference.getMessage().getMessageID()));" +
-                QUEUE_TIMER_CONTEXT_VARIABLE_NAME + ".stopTimer(String.valueOf(reference.getMessage().getMessageID()));");
+        final String stopTimerMethodInvocation = ".stopTimer(String.valueOf(reference.getMessage().getMessageID()));";
+        proceedDeliver.insertAfter(format("%s%s%s%s", TOTAL_TIMER_CONTEXT_VARIABLE_NAME, stopTimerMethodInvocation, QUEUE_TIMER_CONTEXT_VARIABLE_NAME, stopTimerMethodInvocation));
     }
 
     private static byte[] bytecodeOf(final CtClass queueClass) throws IOException, CannotCompileException {
