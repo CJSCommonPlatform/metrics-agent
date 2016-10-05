@@ -94,7 +94,7 @@ public class ArtemisAgentTest {
         addToQueue(clusterBridgeQueue, message1);
         deliver(clusterBridgeQueue, message1);
 
-        assertThat(TimerRegistry.timerOf("cluster.bridge.for.jms.queue.targetQueueABC").getCount(), is(1L));
+        assertThat(TimerRegistry.timerOf("jms.queue.targetQueueABC-myCluster-blah123").getCount(), is(1L));
     }
 
 

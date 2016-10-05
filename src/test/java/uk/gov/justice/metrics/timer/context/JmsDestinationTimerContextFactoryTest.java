@@ -37,7 +37,7 @@ public class JmsDestinationTimerContextFactoryTest {
         final TimerContext timerContext = timerContextOf(queueName, targetQueueName);
         timerContext.startTimer("1");
         timerContext.stopTimer("1");
-        assertThat(TimerRegistry.timerOf("cluster.bridge.for.jms.queue.abc").getCount(), is(1L));
+        assertThat(TimerRegistry.timerOf("jms.queue.abc-my-cluster-aaaa123").getCount(), is(1L));
     }
 
     @Test
@@ -74,6 +74,19 @@ public class JmsDestinationTimerContextFactoryTest {
         TimerRegistry.reset();
 
         final TimerContext timerContextAAA = timerContextOf("aaa", "aaa");
+        timerContextAAA.startTimer("123");
+        timerContextAAA.stopTimer("123");
+
+        assertThat(TimerRegistry.timerOf("jms.destination.total").getCount(), is(0L));
+        assertThat(TimerRegistry.timerOf("aaa").getCount(), is(0L));
+    }
+
+
+    @Test
+    public void shouldNotCollectMeasurmentsDLQ() throws Exception {
+        TimerRegistry.reset();
+
+        final TimerContext timerContextAAA = timerContextOf("jms.queue.DLQ", "jms.queue.DLQ");
         timerContextAAA.startTimer("123");
         timerContextAAA.stopTimer("123");
 
