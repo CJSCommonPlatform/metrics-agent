@@ -1,0 +1,17 @@
+RULE ic proceed
+CLASS org.jboss.invocation.InterceptorContext
+METHOD proceed
+HELPER uk.gov.justice.metrics.agent.wildfly.WildflyAgentHelper
+AT INVOKE processInvocation
+IF TRUE
+DO onEntry($next, $this);
+ENDRULE
+
+RULE ic after proceed
+CLASS org.jboss.invocation.InterceptorContext
+METHOD proceed
+HELPER uk.gov.justice.metrics.agent.wildfly.WildflyAgentHelper
+AFTER WRITE interceptorPosition 2
+IF TRUE
+DO onExit($next, $this);
+ENDRULE
