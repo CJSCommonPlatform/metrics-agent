@@ -1,17 +1,36 @@
-RULE ic proceed
+RULE jms on entry
 CLASS org.jboss.invocation.InterceptorContext
 METHOD proceed
-HELPER uk.gov.justice.metrics.agent.wildfly.WildflyAgentHelper
+HELPER uk.gov.justice.metrics.agent.wildfly.jms.WildflyJmsAgentHelper
 AT INVOKE processInvocation
 IF TRUE
 DO onEntry($next, $this);
 ENDRULE
 
-RULE ic after proceed
+RULE jms on exit
 CLASS org.jboss.invocation.InterceptorContext
 METHOD proceed
-HELPER uk.gov.justice.metrics.agent.wildfly.WildflyAgentHelper
+HELPER uk.gov.justice.metrics.agent.wildfly.jms.WildflyJmsAgentHelper
 AFTER WRITE interceptorPosition 2
 IF TRUE
 DO onExit($next, $this);
+ENDRULE
+
+RULE rest on entry
+CLASS io.undertow.server.HttpServerExchange
+METHOD setRequestPath
+HELPER uk.gov.justice.metrics.agent.wildfly.rest.WildflyRestAgentHelper
+AT RETURN
+IF TRUE
+DO onEntry($this);
+ENDRULE
+
+
+RULE rest on exit
+CLASS io.undertow.server.HttpServerExchange
+METHOD getResponseChannel
+HELPER uk.gov.justice.metrics.agent.wildfly.rest.WildflyRestAgentHelper
+AT RETURN
+IF TRUE
+DO onExit($this);
 ENDRULE

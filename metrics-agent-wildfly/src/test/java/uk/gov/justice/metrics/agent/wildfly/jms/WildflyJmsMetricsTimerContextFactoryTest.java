@@ -1,17 +1,17 @@
-package uk.gov.justice.metrics.agent.wildfly;
+package uk.gov.justice.metrics.agent.wildfly.jms;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.IsSame.sameInstance;
 import static org.junit.Assert.*;
-import static uk.gov.justice.metrics.agent.wildfly.WildflyMetricsTimerContextFactory.timerContextOf;
+import static uk.gov.justice.metrics.agent.wildfly.jms.WildflyJmsMetricsTimerContextFactory.timerContextOf;
 
 import uk.gov.justice.metrics.agent.artemis.agent.common.TimerContext;
 import uk.gov.justice.metrics.agent.artemis.agent.common.TimerRegistry;
 
 import org.junit.Test;
 
-public class WildflyMetricsTimerContextFactoryTest {
+public class WildflyJmsMetricsTimerContextFactoryTest {
 
     @Test
     public void shouldCreateTimerContextForJmsQueue() throws Exception {

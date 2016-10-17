@@ -1,10 +1,12 @@
-package uk.gov.justice.metrics.agent.wildfly;
+package uk.gov.justice.metrics.agent.wildfly.jms;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
 import uk.gov.justice.metrics.agent.artemis.agent.common.TimerRegistry;
+import uk.gov.justice.metrics.agent.wildfly.jms.WildflyJmsAgentHelper;
+import uk.gov.justice.metrics.agent.wildfly.util.TestAppender;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,10 +24,10 @@ import org.jboss.invocation.InterceptorContext;
 import org.junit.Before;
 import org.junit.Test;
 
-public class WildflyAgentHelperTest {
+public class WildflyJmsAgentHelperTest {
 
     public static final ViewDescription INITIAL_INTERCEPTOR = new ViewDescription();
-    WildflyAgentHelper agentHelper = new WildflyAgentHelper();
+    private WildflyJmsAgentHelper agentHelper = new WildflyJmsAgentHelper();
 
     @Before
     public void setUp() throws Exception {
@@ -73,28 +75,10 @@ public class WildflyAgentHelperTest {
         agentHelper.onEntry(INITIAL_INTERCEPTOR, new Object());
 
         logger.removeAppender(appender);
-        final List<LoggingEvent> log = appender.messages;
+        final List<LoggingEvent> log = appender.messages();
         final LoggingEvent logEntry = log.get(0);
         assertThat(logEntry.getLevel(), is(Level.ERROR));
         assertThat((String) logEntry.getMessage(), containsString("Introspection error"));
     }
 
-    private static class TestAppender extends AppenderSkeleton {
-        private List<LoggingEvent> messages = new ArrayList<LoggingEvent>();
-
-        @Override
-        protected void append(final LoggingEvent loggingEvent) {
-            messages.add(loggingEvent);
-        }
-
-        @Override
-        public void close() {
-
-        }
-
-        @Override
-        public boolean requiresLayout() {
-            return false;
-        }
-    }
 }
