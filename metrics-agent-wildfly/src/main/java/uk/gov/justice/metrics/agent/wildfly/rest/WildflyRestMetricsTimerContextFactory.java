@@ -12,7 +12,8 @@ public class WildflyRestMetricsTimerContextFactory {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WildflyRestMetricsTimerContextFactory.class);
     private static final BaseTimeContextFactory BASE_TIME_CONTEXT_FACTORY = new BaseTimeContextFactory("wildfly.rest.total");
-    private static final String URL_PARTS_TO_REMOVE = "/query|/command|/api|/view|/controller|/rest|/[0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12}|/$|^/";
+    private static final String URL_PARTS_TO_REMOVE = "/query|/command|/api|/view|/controller|/rest|/$|^/";
+    private static final String ID_PATTERN = "/[0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12}|/[0-9][A-Za-z0-9]*";
 
 
     public static TimerContext timerContextOf(final String requestURL) {
@@ -21,6 +22,6 @@ public class WildflyRestMetricsTimerContextFactory {
     }
 
     static String timerContextNameFrom(final String requestURL) {
-        return format("wildfly.rest.%s", requestURL.replaceAll(URL_PARTS_TO_REMOVE, ""));
+        return format("wildfly.rest.%s", requestURL.replaceAll(URL_PARTS_TO_REMOVE, "")).replaceAll(ID_PATTERN, "/{id}");
     }
 }

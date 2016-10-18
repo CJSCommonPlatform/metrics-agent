@@ -29,17 +29,21 @@ public class WildflyRestAgentHelperTest {
     public void shouldCollectMetricsForRestRequests() throws Exception {
         HttpServerExchange exchange1 = new HttpServerExchange("/example-query-view/query/view/rest/cakeshop/recipes");
         HttpServerExchange exchange2 = new HttpServerExchange("/example-query-view/query/view/rest/cakeshop/recipes/163af847-effb-46a9-96bc-32a0f7526e14");
-        HttpServerExchange exchange3 = new HttpServerExchange("/example-query-controller/query/controller/rest/cakeshop/recipes");
+        HttpServerExchange exchange3 = new HttpServerExchange("/example-query-view/query/view/rest/cakeshop/recipes/163af847-effb-46a9-96bc-32a0f7526e15");
+        HttpServerExchange exchange4 = new HttpServerExchange("/example-query-controller/query/controller/rest/cakeshop/recipes");
 
         agentHelper.onEntry(exchange1);
         agentHelper.onEntry(exchange2);
         agentHelper.onEntry(exchange3);
+        agentHelper.onEntry(exchange4);
 
         agentHelper.onExit(exchange2);
         agentHelper.onExit(exchange1);
+        agentHelper.onExit(exchange4);
         agentHelper.onExit(exchange3);
 
-        assertThat(TimerRegistry.timerOf("wildfly.rest.example-query-view/cakeshop/recipes").getCount(), is(2L));
+        assertThat(TimerRegistry.timerOf("wildfly.rest.example-query-view/cakeshop/recipes").getCount(), is(1L));
+        assertThat(TimerRegistry.timerOf("wildfly.rest.example-query-view/cakeshop/recipes/{id}").getCount(), is(2L));
         assertThat(TimerRegistry.timerOf("wildfly.rest.example-query-controller/cakeshop/recipes").getCount(), is(1L));
 
     }

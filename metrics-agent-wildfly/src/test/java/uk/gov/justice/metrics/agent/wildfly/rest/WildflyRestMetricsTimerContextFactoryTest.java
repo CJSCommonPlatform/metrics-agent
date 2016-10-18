@@ -17,9 +17,6 @@ public class WildflyRestMetricsTimerContextFactoryTest {
         assertThat(timerContextNameFrom("/example-query-api/query/api/rest/cakeshop/recipes"),
                 is("wildfly.rest.example-query-api/cakeshop/recipes"));
 
-        assertThat(timerContextNameFrom("/example-query-api/query/api/rest/cakeshop/recipes/263af847-effb-46a9-96bc-32a0f7526e44"),
-                is("wildfly.rest.example-query-api/cakeshop/recipes"));
-
         assertThat(timerContextNameFrom("/example-query-controller/query/controller/rest/cakeshop/recipes/"),
                 is("wildfly.rest.example-query-controller/cakeshop/recipes"));
 
@@ -29,6 +26,23 @@ public class WildflyRestMetricsTimerContextFactoryTest {
         assertThat(timerContextNameFrom("/example-command-api/command/api/rest/cakeshop/recipes"),
                 is("wildfly.rest.example-command-api/cakeshop/recipes"));
 
+
+    }
+
+    @Test
+    public void shouldReplaceIdsWithPlaceHolders() throws Exception {
+
+        assertThat(timerContextNameFrom("/example-query-api/query/api/rest/cakeshop/recipes/263af847-effb-46a9-96bc-32a0f7526e44"),
+                is("wildfly.rest.example-query-api/cakeshop/recipes/{id}"));
+
+        assertThat(timerContextNameFrom("/example-query-api/query/api/rest/cakeshop/recipes/123aa"),
+                is("wildfly.rest.example-query-api/cakeshop/recipes/{id}"));
+
+        assertThat(timerContextNameFrom("/example-query-api/query/api/rest/cakeshop/recipes/263af847-effb-46a9-96bc-32a0f7526e44/cakes"),
+                is("wildfly.rest.example-query-api/cakeshop/recipes/{id}/cakes"));
+
+        assertThat(timerContextNameFrom("/example-query-api/query/api/rest/cakeshop/recipes/123aa/cakes"),
+                is("wildfly.rest.example-query-api/cakeshop/recipes/{id}/cakes"));
 
     }
 
