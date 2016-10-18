@@ -65,8 +65,8 @@ public class ArtemisMetricsTimerContextFactoryTest {
         timerContextBBB.stopTimer("111");
 
         final TimerContext timerContextCluster = timerContextOf("my-cluster-bbb", "jms.queue.bbb");
-        timerContextBBB.startTimer("4444");
-        timerContextBBB.stopTimer("4444");
+        timerContextCluster.startTimer("4444");
+        timerContextCluster.stopTimer("4444");
 
         assertThat(TimerRegistry.timerOf("jms.destination.total").getCount(), is(4L));
     }
