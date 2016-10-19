@@ -77,4 +77,13 @@ public class WildflyRestAgentHelperTest {
         assertThat(logEntry.getLevel(), is(Level.ERROR));
         assertThat((String) logEntry.getMessage(), containsString("Introspection error"));
     }
+
+
+    @Test
+    public void shouldDoNothingWhenRequestUrlNull() {
+        HttpServerExchange exchange = new HttpServerExchange(null);
+        agentHelper.onEntry(exchange);
+        agentHelper.onExit(exchange);
+
+    }
 }
