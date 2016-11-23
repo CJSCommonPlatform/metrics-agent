@@ -49,37 +49,6 @@ public class WildflyRestAgentHelperTest {
     }
 
     @Test
-    public void shouldLogErrorIfExpectedMethodNotFoundInPassedObjectOnEntry() {
-        final TestAppender appender = new TestAppender();
-        final Logger logger = Logger.getRootLogger();
-        logger.addAppender(appender);
-
-        agentHelper.onEntry(new Object());
-
-        logger.removeAppender(appender);
-        final List<LoggingEvent> log = appender.messages();
-        final LoggingEvent logEntry = log.get(0);
-        assertThat(logEntry.getLevel(), is(Level.ERROR));
-        assertThat((String) logEntry.getMessage(), containsString("Introspection error"));
-    }
-
-    @Test
-    public void shouldLogErrorIfExpectedMethodNotFoundInPassedObjectOnExit() {
-        final TestAppender appender = new TestAppender();
-        final Logger logger = Logger.getRootLogger();
-        logger.addAppender(appender);
-
-        agentHelper.onExit(new Object());
-
-        logger.removeAppender(appender);
-        final List<LoggingEvent> log = appender.messages();
-        final LoggingEvent logEntry = log.get(0);
-        assertThat(logEntry.getLevel(), is(Level.ERROR));
-        assertThat((String) logEntry.getMessage(), containsString("Introspection error"));
-    }
-
-
-    @Test
     public void shouldDoNothingWhenRequestUrlNull() {
         HttpServerExchange exchange = new HttpServerExchange(null);
         agentHelper.onEntry(exchange);

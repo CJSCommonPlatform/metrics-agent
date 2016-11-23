@@ -8,6 +8,8 @@ import uk.gov.justice.metrics.agent.wildfly.util.ReflectionUtil;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Optional;
+import java.util.function.BiConsumer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,27 +19,23 @@ public class WildflyJmsAgentHelper {
     public static final String INTROSPECTION_ERROR = "Introspection error";
 
     public void onEntry(Object interceptor, Object interceptorContext) {
-        if (firstInterceptorInChain(interceptor)) {
-
-            try {
-                final Object coreMessage = coreMessageFrom(interceptorContext);
-                final TimerContext timerContext = timerContextOf(coreMessage);
-                final Object messageId = messageIdOf(coreMessage);
-                timerContext.startTimer(messageId);
-            } catch (ReflectiveOperationException e) {
-                LOGGER.error(INTROSPECTION_ERROR, e);
-            }
-        }
+        collectMetrics(interceptor, interceptorContext, TimerContext::startTimer);
     }
 
     public void onExit(Object interceptor, Object interceptorContext) {
+        collectMetrics(interceptor, interceptorContext, TimerContext::stopTimer);
+    }
+
+    private void collectMetrics(final Object interceptor, final Object interceptorContext, final BiConsumer<TimerContext, Object> timerContextOperation) {
         if (firstInterceptorInChain(interceptor)) {
             try {
-                final Object coreMessage = coreMessageFrom(interceptorContext);
-                final Object messageId = messageIdOf(coreMessage);
-                final TimerContext timerContext = timerContextOf(coreMessage);
-                timerContext.stopTimer(messageId);
-            } catch (ReflectiveOperationException e) {
+                final Optional<Object> coreMessage = coreMessageFrom(interceptorContext);
+                if (coreMessage.isPresent()) {
+                    final Object messageId = messageIdOf(coreMessage.get()).get();
+                    final TimerContext timerContext = timerContextOf(coreMessage.get());
+                    timerContextOperation.accept(timerContext, messageId);
+                }
+            } catch (Exception e) {
                 LOGGER.error(INTROSPECTION_ERROR, e);
             }
         }
@@ -47,18 +45,18 @@ public class WildflyJmsAgentHelper {
         return interceptor.getClass().getName().contains("ViewDescription");
     }
 
-    private Object messageIdOf(final Object coreMessage) throws ReflectiveOperationException {
+    private Optional<Object> messageIdOf(final Object coreMessage) throws ReflectiveOperationException {
         return invokeMethod(coreMessage, "getMessageID");
     }
 
     private TimerContext timerContextOf(final Object coreMessage) throws ReflectiveOperationException {
-        final Object address = invokeMethod(coreMessage, "getAddress");
-        final Object action = invokeMethod(coreMessage, "getStringProperty", "CPPNAME");
+        final Object address = invokeMethod(coreMessage, "getAddress").get();
+        final Object action = invokeMethod(coreMessage, "getStringProperty", "CPPNAME").get();
         return WildflyJmsMetricsTimerContextFactory.timerContextOf(address, action);
     }
 
-    private Object coreMessageFrom(final Object interceptorContext) throws ReflectiveOperationException {
-        final Object parameters = invokeMethod(interceptorContext, "getParameters");
+    private Optional<Object> coreMessageFrom(final Object interceptorContext) throws ReflectiveOperationException {
+        final Object parameters = invokeMethod(interceptorContext, "getParameters").get();
         Object amqMessage = ((Object[]) parameters)[0];
         return invokeMethod(amqMessage, "getCoreMessage");
     }
