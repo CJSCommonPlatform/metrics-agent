@@ -8,6 +8,8 @@ import static uk.gov.justice.metrics.agent.wildfly.rest.WildflyRestMetricsTimerC
 import uk.gov.justice.metrics.agent.artemis.agent.common.TimerContext;
 import uk.gov.justice.metrics.agent.artemis.agent.common.TimerRegistry;
 
+import java.util.Optional;
+
 import org.junit.Test;
 
 public class WildflyRestMetricsTimerContextFactoryTest {
@@ -49,7 +51,7 @@ public class WildflyRestMetricsTimerContextFactoryTest {
     @Test
     public void shouldCreateTimerContextForRestRequest() {
 
-        final TimerContext timerContext = timerContextOf("/example-query-view/query/view/rest/cakeshop/cakes");
+        final TimerContext timerContext = timerContextOf(Optional.of("/example-query-view/query/view/rest/cakeshop/cakes"));
         timerContext.startTimer("1");
         timerContext.stopTimer("1");
         timerContext.startTimer("2");

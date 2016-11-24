@@ -4,6 +4,8 @@ package uk.gov.justice.metrics.agent.wildfly.rest;
 import static uk.gov.justice.metrics.agent.wildfly.rest.WildflyRestMetricsTimerContextFactory.timerContextOf;
 import static uk.gov.justice.metrics.agent.wildfly.util.ReflectionUtil.invokeMethod;
 
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,7 +34,8 @@ public class WildflyRestAgentHelper {
     }
 
 
-    private String requestPathFrom(final Object serverExchange) throws ReflectiveOperationException {
-        return (String) invokeMethod(serverExchange, "getRequestPath");
+    private Optional<String> requestPathFrom(final Object serverExchange) throws ReflectiveOperationException {
+        final Optional<Object> requestPath = invokeMethod(serverExchange, "getRequestPath");
+        return requestPath.isPresent() ? Optional.of((String) requestPath.get()) : Optional.empty();
     }
 }

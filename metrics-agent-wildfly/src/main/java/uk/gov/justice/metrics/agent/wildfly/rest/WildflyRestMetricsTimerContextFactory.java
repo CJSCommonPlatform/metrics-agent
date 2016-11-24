@@ -6,6 +6,8 @@ import uk.gov.justice.metrics.agent.artemis.agent.common.EmptyTimerContext;
 import uk.gov.justice.metrics.agent.artemis.agent.common.TimerContext;
 import uk.gov.justice.metrics.agent.artemis.agent.common.BaseTimeContextFactory;
 
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,9 +20,13 @@ public class WildflyRestMetricsTimerContextFactory {
     private static final EmptyTimerContext EMPTY_TIMER_CONTEXT = new EmptyTimerContext();
 
 
-    public static TimerContext timerContextOf(final String requestURL) {
-        LOGGER.trace("Fetching timer context for rest request: {}", requestURL);
-        return requestURL != null ? BASE_TIME_CONTEXT_FACTORY.timerContextOf(timerContextNameFrom(requestURL)) : EMPTY_TIMER_CONTEXT;
+    public static TimerContext timerContextOf(final Optional<String> requestURL) {
+        if (requestURL.isPresent()) {
+            LOGGER.trace("Fetching timer context for rest request: {}", requestURL.get());
+            return BASE_TIME_CONTEXT_FACTORY.timerContextOf(timerContextNameFrom(requestURL.get()));
+        } else {
+            return EMPTY_TIMER_CONTEXT;
+        }
     }
 
     static String timerContextNameFrom(final String requestURL) {
