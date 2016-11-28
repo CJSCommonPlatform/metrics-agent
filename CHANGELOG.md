@@ -2,6 +2,12 @@ Change Log
 
 All notable changes to this project will be documented in this file, which follows the guidelines on Keep a CHANGELOG. This project adheres to Semantic Versioning.
 
+[1.2.2] - 2016-11-24
+
+Fixed
+
+Introspection was not found issue fixed
+
 [1.2.1] - 2016-10-19
 
 Fixed
