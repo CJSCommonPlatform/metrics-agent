@@ -1,28 +1,38 @@
-Change Log
+# Change Log
 
-All notable changes to this project will be documented in this file, which follows the guidelines on Keep a CHANGELOG. This project adheres to Semantic Versioning.
+All notable changes to this project will be documented in this file, which follows the guidelines
+on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
+[Semantic Versioning](http://semver.org/).
 
-[1.2.2] - 2016-11-24
+## [Unreleased]
 
-Fixed
+## [1.2.2] - 2016-11-24
 
-Introspection was not found issue fixed
+### Fixed
 
-[1.2.1] - 2016-10-19
+- Introspection was not found issue fixed
 
-Fixed
+## [1.2.1] - 2016-10-19
 
-NullPointerException fixed
+### Fixed
 
-[1.2.0] - 2016-10-18
+- NullPointerException fixed
 
-Added
+## [1.2.0] - 2016-10-18
 
-REST request metrics
+### Added
 
-[1.1.0] - 2016-10-17
+- REST request metrics
 
-Added
+## [1.1.0] - 2016-10-17
 
-Artemis Metrics agent added
-Wildfly Metrics agent added
+### Added
+
+- Artemis Metrics agent added
+- Wildfly Metrics agent added
+
+[Unreleased]: https://github.com/CJSCommonPlatform/microservice_framework/compare/release-1.2.2...HEAD
+[1.2.2]: https://github.com/CJSCommonPlatform/microservice_framework/compare/release-1.2.1...release-1.2.2
+[1.2.1]: https://github.com/CJSCommonPlatform/microservice_framework/compare/release-1.2.0...release-1.2.1
+[1.2.0]: https://github.com/CJSCommonPlatform/microservice_framework/compare/release-1.1.0...release-1.2.0
+[1.1.0]: https://github.com/CJSCommonPlatform/microservice_framework/commits/release-1.1.0
