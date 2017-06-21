@@ -19,6 +19,7 @@
 
     <properties>
         <common-bom.version>1.2.0</common-bom.version>
+        <test-utils.version>1.4.0</test-utils.version>
     </properties>
 
     <dependencyManagement>
@@ -39,8 +40,11 @@
             <artifactId>slf4j-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
+            <groupId>uk.gov.justice.utils</groupId>
+            <artifactId>test-utils-logging-log4j</artifactId>
+            <version>${test-utils.version}</version>
+            <type>pom</type>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
