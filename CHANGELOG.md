@@ -6,6 +6,13 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 
 ## [Unreleased]
 
+## [1.2.3] - 2017-11-29
+
+### Changed
+- Updated to framework parent POM 1.7.0
+- Updated to common BOM 1.22.0
+- Converted to Bintray releases and added sonar analysis
+
 ## [1.2.2] - 2016-11-24
 
 ### Fixed
