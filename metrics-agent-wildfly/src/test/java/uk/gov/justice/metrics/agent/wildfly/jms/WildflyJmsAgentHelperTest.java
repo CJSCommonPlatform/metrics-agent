@@ -65,6 +65,13 @@ public class WildflyJmsAgentHelperTest {
     }
 
     @Test
+    public void shouldNotCollectMetricsIfNoParametersInContext() {
+        agentHelper.onEntry(INITIAL_INTERCEPTOR, new InterceptorContext());
+        agentHelper.onExit(INITIAL_INTERCEPTOR, new InterceptorContext());
+        assertThat(TimerRegistry.timerOf("wildfly.jms.queue.abc-contextname.actionname").getCount(), is(0L));
+    }
+
+    @Test
     public void shouldNotCollectMetricsIfNotInitialInterceptor() {
         final Message message = new ActiveMQTextMessage(new TestClientMessage(127, "jms.queue.abc", "contextname.actionname"), null);
         agentHelper.onEntry(new Object(), new InterceptorContext(message));
@@ -72,7 +79,6 @@ public class WildflyJmsAgentHelperTest {
         assertThat(TimerRegistry.timerOf("wildfly.jms.queue.abc-contextname.actionname").getCount(), is(0L));
 
     }
-
 
     @Test
     public void shouldLogErrorInCaseExcpectedMethodNotFoundInPassedObject() {
