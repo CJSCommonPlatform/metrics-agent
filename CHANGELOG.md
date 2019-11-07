@@ -6,6 +6,15 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 
 ## [Unreleased]
 
+## [1.2.5] - 2019-11-07
+### Fixed
+- Do nothing if InterceptorContext has no parameters, fixes error output when there are no parameters 
+
+### Changed
+- Updated to framework parent pom version 1.13.0
+- Updated to common-bom version 2.4.0
+- Updated to test-utils version 1.24.3
+
 ## [1.2.3] - 2017-11-29
 
 ### Changed
