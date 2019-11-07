@@ -6,7 +6,7 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 
 ## [Unreleased]
 
-## [1.2.5] - 2019-11-07
+## [1.2.4] - 2019-11-07
 ### Fixed
 - Do nothing if InterceptorContext has no parameters, fixes error output when there are no parameters 
 
